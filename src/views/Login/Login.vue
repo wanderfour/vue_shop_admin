@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="login-box">
       <div class="avatar-box">
-        <img src="@/assets/logo.png" alt="" />
+        <img src="@/assets/panda_logo.jpeg" alt="" />
       </div>
       <el-form
         ref="loginFormRef"
@@ -78,7 +78,6 @@ export default {
         this.$message.success('登录成功')
         // 复习：sessionStorage 用于本地存储一个会话（session）中的数据，这些数据只有在同一个会话中的页面才能访问，会话结束后数据也随之销毁。localStorage 用于存储一个域名下的需要永久存在在本地的数据，这些数据可以被一直访问，直到这些数据被主动删除。
         // 将服务器返回的 token 保存到 sessionStorage
-        console.log(res)
         window.sessionStorage.setItem('token', res.data.token)
         // 跳转到后台主页
         this.$router.push('/home')

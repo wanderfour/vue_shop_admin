@@ -8,7 +8,18 @@ import {
   Container,
   Header,
   Aside,
-  Main
+  Main,
+  Menu,
+  Submenu,
+  MenuItem,
+  Breadcrumb,
+  BreadcrumbItem,
+  Card,
+  Row,
+  Col,
+  Table,
+  TableColumn,
+  Switch
 } from 'element-ui'
 
 Vue.use(Button)
@@ -19,6 +30,17 @@ Vue.use(Container)
 Vue.use(Header)
 Vue.use(Aside)
 Vue.use(Main)
+Vue.use(Menu)
+Vue.use(Submenu)
+Vue.use(MenuItem)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Card)
+Vue.use(Row)
+Vue.use(Col)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Switch)
 
 // 将 Message 挂载到 Vue原型对象，如此每个组件都可以通过 this.$message 访问
 Vue.prototype.$message = Message
