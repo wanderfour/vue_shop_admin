@@ -19,7 +19,13 @@ import {
   Col,
   Table,
   TableColumn,
-  Switch
+  Switch,
+  Tooltip,
+  Pagination,
+  Dialog,
+  MessageBox,
+  Select,
+  Option
 } from 'element-ui'
 
 Vue.use(Button)
@@ -41,6 +47,13 @@ Vue.use(Col)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Switch)
+Vue.use(Tooltip)
+Vue.use(Pagination)
+Vue.use(Dialog)
+Vue.use(Select)
+Vue.use(Option)
 
 // 将 Message 挂载到 Vue原型对象，如此每个组件都可以通过 this.$message 访问
 Vue.prototype.$message = Message
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$confirm = MessageBox.confirm
