@@ -148,8 +148,7 @@
         label-width="80px"
       >
         <el-form-item label="用户名">
-          <input type="text" :value="editForm.id" style="display: none;" />
-          <el-input v-model="editUsername" disabled></el-input>
+          <el-input v-model="editForm.username" disabled></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="editForm.email"></el-input>
@@ -270,11 +269,7 @@ export default {
       // 用户信息
       userInfo: {},
       // 编辑用户表单
-      editForm: {
-        id: null,
-        email: '',
-        mobile: ''
-      },
+      editForm: {},
       // 编辑用户校验规则
       editFormRules: {
         email: [
@@ -288,19 +283,12 @@ export default {
       },
       // 编辑用户 dialog 开关
       editDialogVisible: false,
-      // 被编辑的用户名
-      editUsername: '',
       // 分配权限 dialog 开关
       rightsDialogVisible: false,
       // 角色列表
       rolesList: [],
       // 权限分配 dialog 表单
-      rightsForm: {
-        id: null,
-        rid: null,
-        username: '',
-        roleName: ''
-      },
+      rightsForm: {},
       // 分配权限表单验证规则
       rightsFormRules: {
         rid: [{ required: true, message: '请选择分配角色', trigger: 'change' }]
@@ -357,18 +345,10 @@ export default {
     },
     // 点击编辑按钮获取用户信息
     async clickEditBtn(id) {
-      const res = await this.getUserInfoById(id)
-      this.editUsername = res.username
-      this.editForm.id = res.id
-      this.editForm.email = res.email
-      this.editForm.mobile = res.mobile
-      this.editDialogVisible = true
-    },
-    // 根据id获取用户信息,返回一个 promise 对象
-    async getUserInfoById(id) {
       const { data: res } = await this.$http.get(`/users/${id}`)
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      return res.data
+      this.editForm = res.data
+      this.editDialogVisible = true
     },
     // 编辑用户 diglog 关闭的处理函数
     editDialogClosed() {
@@ -394,27 +374,28 @@ export default {
       })
     },
     // 删除用户
-    clickDelBtn(id) {
-      this.$confirm('确认删除该用户?', '提示', {
+    async clickDelBtn(id) {
+      // $confirm 返回一个promise，如果用户确定则返回内容 confirm，取消则返回 cancel
+      const confirmResult = await this.$confirm('确认删除该用户?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
+      }).catch(err => err)
+      // 没有确认删除
+      if (confirmResult !== 'confirm') {
+        return this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      }
+      // 确认了删除，发起请求，根据id删除用户信息
+      const { data: res } = await this.$http.delete(`/users/${id}`)
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.$message({
+        type: 'success',
+        message: '删除用户成功!'
       })
-        .then(async () => {
-          const { data: res } = await this.$http.delete(`/users/${id}`)
-          if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-          this.$message({
-            type: 'success',
-            message: '删除用户成功!'
-          })
-          this.initUserList()
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
+      this.initUserList()
     },
     // 获取角色列表
     async initRolesList() {
@@ -430,14 +411,16 @@ export default {
     },
     // 点击分配权限按钮处理函数
     async clickRightsBtn(id, rName) {
-      const res = await this.getUserInfoById(id)
-      this.rightsForm.id = id
-      // this.rightsForm.rid = res.rid
-      this.rightsForm.username = res.username
+      const { data: res } = await this.$http.get(`/users/${id}`)
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.rightsForm = res.data
       this.rightsForm.roleName = rName
+      // 清空默认选项
+      this.rightsForm.rid = null
       this.initRolesList()
       this.rightsDialogVisible = true
     },
+    // TODO:分配权限代码优化
     // 分配权限处理函数
     editRights(uid) {
       // 请求前表单预校验
