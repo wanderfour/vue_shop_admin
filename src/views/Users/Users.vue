@@ -84,7 +84,7 @@
                 type="warning"
                 icon="el-icon-setting"
                 size="mini"
-                @click="clickRightsBtn(scope.row.id, scope.row.role_name)"
+                @click="clickRightsBtn(scope.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -171,20 +171,15 @@
     >
       <!-- 表单区域 -->
 
-      <el-form
-        ref="rightsFormRef"
-        :model="rightsForm"
-        :rules="rightsFormRules"
-        label-width="80px"
-      >
+      <el-form ref="rightsFormRef" :model="rightsForm" label-width="80px">
         <el-form-item label="用户名称">
           <span>{{ rightsForm.username }}</span>
         </el-form-item>
         <el-form-item label="用户角色">
-          <span>{{ rightsForm.roleName }}</span>
+          <span>{{ rightsForm.role_name }}</span>
         </el-form-item>
         <el-form-item label="分配角色" prop="rid">
-          <el-select v-model="rightsForm.rid" placeholder="请选择角色">
+          <el-select v-model="selectedRoleId" placeholder="请选择角色">
             <el-option
               v-for="item in rolesList"
               :key="item.id"
@@ -266,8 +261,6 @@ export default {
           { validator: checkMobile, trigger: 'blur' }
         ]
       },
-      // 用户信息
-      userInfo: {},
       // 编辑用户表单
       editForm: {},
       // 编辑用户校验规则
@@ -289,10 +282,8 @@ export default {
       rolesList: [],
       // 权限分配 dialog 表单
       rightsForm: {},
-      // 分配权限表单验证规则
-      rightsFormRules: {
-        rid: [{ required: true, message: '请选择分配角色', trigger: 'change' }]
-      }
+      // 已选中的角色id值
+      selectedRoleId: null
     }
   },
   methods: {
@@ -403,42 +394,33 @@ export default {
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.rolesList = res.data
     },
-    // 根据角色id查询角色信息
-    async getRoleById(rid) {
-      const { data: res } = await this.$http.get(`/roles/${rid}`)
-      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.rightsForm.roleName = res.data.roleName
-    },
     // 点击分配权限按钮处理函数
-    async clickRightsBtn(id, rName) {
-      const { data: res } = await this.$http.get(`/users/${id}`)
-      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.rightsForm = res.data
-      this.rightsForm.roleName = rName
+    async clickRightsBtn(userInfo) {
+      this.rightsForm = userInfo
       // 清空默认选项
-      this.rightsForm.rid = null
       this.initRolesList()
       this.rightsDialogVisible = true
     },
-    // TODO:分配权限代码优化
     // 分配权限处理函数
-    editRights(uid) {
-      // 请求前表单预校验
-      this.$refs.rightsFormRef.validate(async valid => {
-        if (!valid) return
-        // 预校验通过，发起请求
-        const { data: res } = await this.$http.put(`users/${uid}/role`, {
-          rid: this.rightsForm.rid
-        })
-        if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-        this.$message.success('分配权限成功')
-        this.initUserList()
-        this.rightsDialogVisible = false
+    async editRights(uid) {
+      // 选择角色后才能发起请求
+      if (!this.selectedRoleId) {
+        return this.$message.error('请选择要分配的角色')
+      }
+      // 预校验通过，发起请求
+      const { data: res } = await this.$http.put(`users/${uid}/role`, {
+        rid: this.selectedRoleId
       })
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.$message.success('分配权限成功')
+      this.initUserList()
+      this.rightsDialogVisible = false
     },
     // 关闭分配权限 dialog 时重置表单
     rightsDialogClosed() {
-      this.$refs.rightsFormRef.resetFields()
+      // 关闭 dialog 初始化数据
+      this.selectedRoleId = null
+      this.rightsForm = {}
     }
   },
   created() {
