@@ -67,12 +67,12 @@
         </el-table-column>
         <el-table-column label="操作">
           <!-- 编辑 -->
-          <!-- TODO:编辑角色 -->
+          <!-- TODO:编辑商品分类 -->
           <el-button type="primary" icon="el-icon-edit" size="mini"
             >编辑</el-button
           >
           <!-- 删除 -->
-          <!-- TODO:删除角色 -->
+          <!-- TODO:删除商品分类 -->
           <el-button type="danger" icon="el-icon-delete" size="mini"
             >删除</el-button
           >
