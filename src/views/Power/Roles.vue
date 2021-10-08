@@ -341,7 +341,6 @@ export default {
     },
     // 删除角色
     async deleteRole(id) {
-      console.log(id)
       const confirmResult = await this.$confirm(
         '此操作将删除角色, 是否继续?',
         '提示',

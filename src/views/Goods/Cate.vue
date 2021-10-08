@@ -66,16 +66,24 @@
           </template>
         </el-table-column>
         <el-table-column label="操作">
-          <!-- 编辑 -->
-          <!-- TODO:编辑商品分类 -->
-          <el-button type="primary" icon="el-icon-edit" size="mini"
-            >编辑</el-button
-          >
-          <!-- 删除 -->
-          <!-- TODO:删除商品分类 -->
-          <el-button type="danger" icon="el-icon-delete" size="mini"
-            >删除</el-button
-          >
+          <template slot-scope="scope">
+            <!-- 编辑 -->
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              size="mini"
+              @click="editCate(scope.row.cat_id)"
+              >编辑</el-button
+            >
+            <!-- 删除 -->
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              @click="deleteCate(scope.row.cat_id)"
+              >删除</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
 
@@ -127,6 +135,29 @@
         <el-button type="primary" @click="submitCate">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 编辑分类 dialog -->
+    <el-dialog
+      title="编辑分类"
+      :visible.sync="editDialogVisible"
+      @close="editDialogClosed"
+    >
+      <!-- 表单区域 -->
+      <el-form
+        :model="editForm"
+        :rules="editCateRules"
+        ref="editFormRef"
+        label-width="80px"
+      >
+        <el-form-item label="分类名称" prop="cat_name">
+          <el-input v-model="editForm.cat_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- 按钮区域 -->
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editCateConfirm">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -170,6 +201,14 @@ export default {
         label: 'cat_name',
         children: 'children',
         checkStrictly: true
+      },
+      // 编辑分类 dialog
+      editDialogVisible: false,
+      editForm: {},
+      editCateRules: {
+        cat_name: [
+          { required: true, message: '请填写分类名称', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -178,7 +217,6 @@ export default {
       const { data: res } = await this.$http.get('/categories', {
         params: this.queryInfo
       })
-      console.log(res)
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.catesList = res.data.result
       this.total = res.data.total
@@ -246,6 +284,58 @@ export default {
         this.initCatesList()
         this.addDialogVisible = false
       })
+    },
+    // 编辑商品分类
+    async editCate(id) {
+      const { data: res } = await this.$http.get('/categories/' + id)
+      console.log(res)
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.editForm = res.data
+      this.editDialogVisible = true
+    },
+    editDialogClosed() {
+      this.$refs.editFormRef.resetFields()
+      this.editForm = {}
+    },
+    editCateConfirm() {
+      // 预校验
+      this.$refs.editFormRef.validate(async valid => {
+        if (!valid) return
+        // 校验通过发起请求
+        const { data: res } = await this.$http.put(
+          '/categories/' + this.editForm.cat_id,
+          {
+            cat_name: this.editForm.cat_name
+          }
+        )
+        console.log(res)
+        if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+        this.$message.success('更新分类成功')
+        this.editDialogVisible = false
+        this.initCatesList()
+      })
+    },
+    // 删除商品分类
+    async deleteCate(id) {
+      const confirmResult = await this.$confirm(
+        '此操作将删除角色, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      ).catch(err => err)
+      if (confirmResult === 'cancel') return this.$message.info('已取消删除')
+      const { data: res } = await this.$http.delete('/categories/' + id)
+      console.log(res)
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.$message.success('删除分类成功')
+      // 如果删除到最后一页没有数据，则页码值减一
+      if (this.catesList.length === 1 && this.total > 1) {
+        this.queryInfo.pagenum = this.queryInfo.pagenum - 1
+      }
+      this.initCatesList()
     }
   },
   created() {

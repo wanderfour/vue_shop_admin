@@ -386,6 +386,9 @@ export default {
         type: 'success',
         message: '删除用户成功!'
       })
+      if (this.usersList.length === 1 && this.total > 1) {
+        this.queryInfo.pagenum = this.queryInfo.pagenum - 1
+      }
       this.initUserList()
     },
     // 获取角色列表
