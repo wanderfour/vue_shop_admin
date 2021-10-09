@@ -121,7 +121,6 @@
           >
             <el-table-column type="expand">
               <template slot-scope="scope">
-                <!-- TODO:解决input显示独立控制的问题 -->
                 <div class="expand-box">
                   <el-tag
                     v-for="(tag, i) in scope.row.attr_vals"
