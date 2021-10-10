@@ -62,3 +62,33 @@ npm run lint
 ### 数据统计
 
 - [x] 数据报表
+
+### 优化 Vue 项目
+
+- [x] 优化策略
+  - [x] nprogress 加载进度条
+  - [x] serve 控制台警告消除
+  - [x] transform-remove-console 插件，build 自动移除 console.log
+  - [x] 在 vue.config.js 文件中修改 webpack 的默认配置
+  - [x] 首页内容定制
+- [x] 打包优化
+  - 通过 vue.ui 控制台和分析查看项目报告
+  - 为开发模式与发布模式指定不同的打包入口
+    > vue.config.js 中自定义 webpack 的打包配置
+- [x] 第三方库启用 CDN 加速
+  - 通过 externals 加载外部 CDN 资源
+- [x] Element-UI 组件按需加载
+- [ ] 路由懒加载
+  > @babel/plugin-syntax-dynamic-import
+- [ ] 首页内容定制
+
+### 部署 Vue 项目
+
+- node 创建 web 服务器
+- 开启 gzip 配置
+  > 第三方包 compression
+- [ ] 配置 https 服务
+  > 对传输的数据进行加密
+  - [ ] 申请域名
+  - [ ] 申请 SSL 证书：https://freessl.cn
+- 使用 pm2 管理应用

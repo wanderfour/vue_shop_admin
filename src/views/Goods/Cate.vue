@@ -288,7 +288,6 @@ export default {
     // 编辑商品分类
     async editCate(id) {
       const { data: res } = await this.$http.get('/categories/' + id)
-      console.log(res)
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.editForm = res.data
       this.editDialogVisible = true
@@ -308,7 +307,6 @@ export default {
             cat_name: this.editForm.cat_name
           }
         )
-        console.log(res)
         if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
         this.$message.success('更新分类成功')
         this.editDialogVisible = false
@@ -328,7 +326,6 @@ export default {
       ).catch(err => err)
       if (confirmResult === 'cancel') return this.$message.info('已取消删除')
       const { data: res } = await this.$http.delete('/categories/' + id)
-      console.log(res)
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.$message.success('删除分类成功')
       // 如果删除到最后一页没有数据，则页码值减一

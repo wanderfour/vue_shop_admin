@@ -64,7 +64,7 @@
               type="success"
               icon="el-icon-check"
               size="mini"
-              @click="showProgressDialog(scope.row.order_id)"
+              @click="showProgressDialog()"
             ></el-button>
           </template>
         </el-table-column>
@@ -212,13 +212,11 @@ export default {
       this.editAddrDialogVisible = false
     },
     // 显示物流进度面板处理函数
-    showProgressDialog(id) {
-      // console.log(id)
+    showProgressDialog() {
       // api报错，故写死数据
-      // const { data: res } = await this.$http.get('/kuaidi/SF1433289416347')
       this.progressList = this.progressData.data
-      console.log(this.progressList)
       this.progressDialogVisible = true
+      console.log('123')
     }
   },
   created() {

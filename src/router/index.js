@@ -1,18 +1,58 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '@/views/Login/Login.vue'
-import Home from '@/views/Home/Home.vue'
-import Welcome from '@/views/Welcome/Welcome.vue'
-import Users from '@/views/Users/Users.vue'
-import Roles from '@/views/Power/Roles.vue'
-import Rights from '@/views/Power/Rights.vue'
-import Cate from '@/views/Goods/Cate.vue'
-import Params from '@/views/Goods/Params.vue'
-import Goods from '@/views/Goods/Goods.vue'
-import AddGoods from '@/views/Goods/AddGoods.vue'
-import Order from '@/views/Order/Order.vue'
-import Report from '@/views/Report/Report.vue'
 
+// import Order from '@/views/Order/Order.vue'
+// import Report from '@/views/Report/Report.vue'
+
+const Order = () =>
+  import(/* webpackChunkName: "order_report" */ '@/views/Order/Order.vue')
+
+const Report = () =>
+  import(/* webpackChunkName: "order_report" */ '@/views/Report/Report.vue')
+
+// import Login from '@/views/Login/Login.vue'
+// import Home from '@/views/Home/Home.vue'
+// import Welcome from '@/views/Welcome/Welcome.vue'
+
+// import Users from '@/views/Users/Users.vue'
+// import Roles from '@/views/Power/Roles.vue'
+// import Rights from '@/views/Power/Rights.vue'
+
+// import Cate from '@/views/Goods/Cate.vue'
+// import Params from '@/views/Goods/Params.vue'
+// import Goods from '@/views/Goods/Goods.vue'
+// import AddGoods from '@/views/Goods/AddGoods.vue'
+
+const Cate = () =>
+  import(/* webpackChunkName: "goods_params_cate" */ '@/views/Goods/Cate.vue')
+
+const Params = () =>
+  import(/* webpackChunkName: "goods_params_cate" */ '@/views/Goods/Params.vue')
+const Goods = () =>
+  import(/* webpackChunkName: "goods_params_cate" */ '@/views/Goods/Goods.vue')
+const AddGoods = () =>
+  import(
+    /* webpackChunkName: "goods_params_cate" */ '@/views/Goods/AddGoods.vue'
+  )
+
+const Login = () =>
+  import(/* webpackChunkName: "login_home_welcome" */ '@/views/Login/Login.vue')
+const Home = () =>
+  import(/* webpackChunkName: "login_home_welcome" */ '@/views/Home/Home.vue')
+const Welcome = () =>
+  import(
+    /* webpackChunkName: "login_home_welcome" */ '@/views/Welcome/Welcome.vue'
+  )
+
+const Users = () =>
+  import(/* webpackChunkName: "users_roles_rights" */ '@/views/Users/Users.vue')
+const Roles = () =>
+  import(/* webpackChunkName: "users_roles_rights" */ '@/views/Power/Roles.vue')
+Vue.use(VueRouter)
+const Rights = () =>
+  import(
+    /* webpackChunkName: "users_roles_rights" */ '@/views/Power/Rights.vue'
+  )
 Vue.use(VueRouter)
 
 const routes = [

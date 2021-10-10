@@ -430,7 +430,6 @@ export default {
     },
     // 删除参数tag
     removeTag(i, attr) {
-      console.log('remove')
       attr.attr_vals.splice(i, 1)
       this.saveAttrVal(attr)
     }

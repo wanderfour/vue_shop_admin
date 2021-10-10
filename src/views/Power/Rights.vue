@@ -40,7 +40,6 @@ export default {
     // 获取权限列表的函数
     async initRightsList() {
       const { data: res } = await this.$http.get('/rights/list')
-      console.log(res)
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.rightsList = res.data
     }

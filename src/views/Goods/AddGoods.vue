@@ -314,10 +314,8 @@ export default {
           this.addForm.attrs.push(newInfo)
         })
         form.attrs = this.addForm.attrs
-        console.log(form)
         // 发起添加商品的请求
         const { data: res } = await this.$http.post('goods', form)
-        console.log(res)
         if (res.meta.status !== 201) return this.$message.error(res.meta.msg)
         this.$message.success('添加商品成功')
         this.$router.push('/goods')
