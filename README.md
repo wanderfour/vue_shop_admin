@@ -78,9 +78,9 @@ npm run lint
 - [x] 第三方库启用 CDN 加速
   - 通过 externals 加载外部 CDN 资源
 - [x] Element-UI 组件按需加载
-- [ ] 路由懒加载
+- [x] 路由懒加载
   > @babel/plugin-syntax-dynamic-import
-- [ ] 首页内容定制
+- [x] 首页内容定制
 
 ### 部署 Vue 项目
 
@@ -89,6 +89,6 @@ npm run lint
   > 第三方包 compression
 - [ ] 配置 https 服务
   > 对传输的数据进行加密
-  - [ ] 申请域名
+  - [x] 申请域名
   - [ ] 申请 SSL 证书：https://freessl.cn
 - 使用 pm2 管理应用
