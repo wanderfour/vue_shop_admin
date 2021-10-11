@@ -1,4 +1,6 @@
 module.exports = {
+  // 确保打包后 dist 目录的 css 和 js 资源被正确访问
+  publicPath: './',
   // 配置开发和生成环境不同的打包入口
   chainWebpack: config => {
     // 发布模式

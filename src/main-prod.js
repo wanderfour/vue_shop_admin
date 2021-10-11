@@ -26,7 +26,7 @@ import NProgress from 'nprogress'
 // import 'nprogress/nprogress.css'
 
 // 配置访问根路径
-axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
+axios.defaults.baseURL = 'http://47.108.236.228:8889/api/private/v1/'
 // 复习：axios 请求拦截器
 axios.interceptors.request.use(config => {
   // 在请求拦截器中，展示进度条
